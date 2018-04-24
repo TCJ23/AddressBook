@@ -1,6 +1,10 @@
-package company;
+package com.gft.addressbook.company;
 
-import comparators.*;
+import com.gft.addressbook.ConsoleInput;
+import com.gft.addressbook.CsvImporter;
+import com.gft.addressbook.IAddressBookManager;
+import com.gft.addressbook.comparators.*;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,7 +13,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-
+@Component
 public class AddressBookManager implements IAddressBookManager {
     private List<AddressBookEntry> mainListOfAddressBookEntries = new ArrayList<>(); ///ID ISSUE
 //    ------------------------------------------------------------------------DAO IMPLEMENTATION -------------------------------------------------------------------------------------------------------------
@@ -18,13 +22,6 @@ public class AddressBookManager implements IAddressBookManager {
 //    private Set<Integer> uniqueIds = new TreeSet<>();
     private Integer counter = 0;
     ConsoleInput consoleInput = new ConsoleInput();
-///   ------------------------------------------------------------------------GENERATE DATA -------------------------------------------------------------------------------------------------------------
-//    public AddressBookManager() {
-//        addAddrBookEntry("T", "J", "123");
-//        addAddrBookEntry("T", "G", "456");
-//        addAddrBookEntry("P", "B", "321");
-///   -------------------------------------------------------------------------GENERATE DATA -------------------------------------------------------------------------------------------------------------
-
 
     public AddressBookManager() {
         addAddrBookEntry("T", "J", "123");
@@ -34,6 +31,7 @@ public class AddressBookManager implements IAddressBookManager {
             Path path = Paths.get("addressBook.csv");
             String csvFileContent = new String(Files.readAllBytes(path));
             List<AddressBookEntry> addressBookEntries = CsvImporter.importFromCSV(csvFileContent);
+
 //            for (AddressBookEntry addrBookValidation : addressBookEntries) {
 //                if (uniqueIds.add(addrBookValidation.getID()) == false){
 //                    throw new IllegalArgumentException("Duplicated ID" + addrBookValidation.getID());

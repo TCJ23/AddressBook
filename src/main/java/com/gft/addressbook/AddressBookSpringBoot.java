@@ -1,12 +1,13 @@
-package com;
+package com.gft.addressbook;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+public class AddressBookSpringBoot {
 
-public class App {
     public static void main(String[] args) {
-        SpringApplication.run(App.class);
+        SpringApplication.run(AddressBookSpringBoot.class);
     }
 }
+

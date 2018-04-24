@@ -1,9 +1,7 @@
-package company;
+package com.gft.addressbook;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import com.gft.addressbook.company.AddressBookEntry;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

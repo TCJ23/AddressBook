@@ -1,4 +1,6 @@
-package company;
+package com.gft.addressbook;
+
+import com.gft.addressbook.company.AddressBookEntry;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package comparators;
+package com.gft.addressbook.comparators;
 
-import company.AddressBookEntry;
+import com.gft.addressbook.company.AddressBookEntry;
 
 import java.util.Comparator;
 

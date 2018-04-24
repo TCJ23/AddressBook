@@ -1,4 +1,7 @@
-package company;
+package com.gft.addressbook;
+
+import com.gft.addressbook.company.AddressBookEntry;
+import com.gft.addressbook.company.AddressBookManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -89,7 +92,7 @@ public class Main {
     private static String makePhoneAmericanStd(ConsoleInput consoleInput) {
         String phoneToEdit = consoleInput.getPhoneNumberFromConsole().replaceAll("[^0-9]", "");
         while (phoneToEdit.length() != 10) {
-            System.out.println("Please provide exactly 10 gigits number");
+            System.out.println("Please provide exactly 10 digits number");
             phoneToEdit = consoleInput.getPhoneNumberFromConsole().replaceAll("[^0-9]", "");
         }
         phoneToEdit = String.format("(%s) %s-%s", phoneToEdit.substring(0, 3), phoneToEdit.substring(3, 6), phoneToEdit.substring(6, 10));

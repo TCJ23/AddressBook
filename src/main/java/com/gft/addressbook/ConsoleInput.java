@@ -1,4 +1,4 @@
-package company;
+package com.gft.addressbook;
 
 import java.util.Scanner;
 

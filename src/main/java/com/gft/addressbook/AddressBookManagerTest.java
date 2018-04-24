@@ -1,8 +1,6 @@
-package company;
+package com.gft.addressbook;
 
-import java.io.IOException;
-
-import static org.junit.Assert.*;
+import com.gft.addressbook.company.AddressBookManager;
 
 public class AddressBookManagerTest {
 

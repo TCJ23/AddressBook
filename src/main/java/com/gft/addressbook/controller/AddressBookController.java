@@ -1,37 +1,49 @@
-package com;
+package com.gft.addressbook.controller;
 
-import company.AddressBookEntry;
-import company.AddressBookManager;
-import company.IAddressBookManager;
+import com.gft.addressbook.IAddressBookManager;
+import com.gft.addressbook.company.AddressBookEntry;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class AddressBookController {
-    IAddressBookManager addressBookManager = new AddressBookManager();
+    //    @Autowired // pole -> setter -> konstruktor
+    private IAddressBookManager addressBookManager;
 
-    // ----------------------------------------------------------- OPTION 1 ----------------------------------------------------------------
-    @RequestMapping(path = "find/{textToSearch}", method = RequestMethod.GET, produces = "application/json")
-//    @GetMapping("/{textToSearch}")
-    public String findOne(@PathVariable String textToSearch) {
-        String result = ""; //        String textToSearch = consoleInput.getTextToSort();
-        List<AddressBookEntry> adr = addressBookManager.findAddrBookEntry(textToSearch);
-        if (adr.isEmpty() == false) {
-            for (AddressBookEntry i : adr) {
-                result = result + "Found following record " + i.toString() + "\n";
-            }
-            return result;
-        } else if (adr.isEmpty()) {
-            return ("Not sure what you looking for ?");
-        }
-        return null;
+    @Autowired
+    public AddressBookController(IAddressBookManager addressBookManager) {
+        this.addressBookManager = addressBookManager;
     }
-// ----------------------------------------------------------- OPTION 2 ----------------------------------------------------------------
+
+    /* find single record by ID */
+    @GetMapping("/address/{id}")
+    public AddressBookEntry singleByID(@PathVariable(value = "id") Integer id){
+        return addressBookManager.findAddrBookEntry(id);
+    }
+/*DEPRECATED
+    @GetMapping("/find/{textToSearch}")
+    public List<AddressBookEntry> findOne(@PathVariable String textToSearch) {
+        List<AddressBookEntry> adr = addressBookManager.findAddrBookEntry(textToSearch);
+        return adr;
+    }
+    */
+
+    /* Opt to list all addresses */
+    @GetMapping("/addresses")
+    public List<AddressBookEntry> allAdrBook(){
+        return addressBookManager.listAllAddrBookEntries();
+    }
+
+    /* opt to sort by variable*/
+    @GetMapping("/addresses/sort")
+    public List<AddressBookEntry> listAll(@RequestParam(value="sort", required = false, defaultValue="defaultSort") String textToSort) throws InterruptedException {
+        return addressBookManager.listAllSortedBookEntires(textToSort);
+    }
+
+    /** OPTION 6 */
 
     @RequestMapping(path = "add/{strFirst}/{strLast}/{strPhone}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity addBookEntry(@PathVariable String strFirst, @PathVariable String strLast, @PathVariable String strPhone) {
@@ -46,21 +58,10 @@ public class AddressBookController {
         return "you deleted record: " + addressBookManager.removeAddrBookEntry(id);
     }
 
-
-// ----------------------------------------------------------- OPTION 4 ----------------------------------------------------------------
-
-    @RequestMapping(path = "listAll", method = RequestMethod.GET, produces = "application/json")
-    public String listAll() {
-        String result = "";
-        for (AddressBookEntry x : addressBookManager.listAllAddrBookEntries()) {
-            result = result + x.toString() + "\n";
-        }
-        return result;
-    }
 // ----------------------------------------------------------- OPTION 4 ----------------------------------------------------------------
 
     @RequestMapping(path = "updatePhone/{id}/{strPhone}", method = RequestMethod.PUT)
-    public String updateAddrBookPhone (@PathVariable Integer id, @PathVariable String strPhone){
+    public String updateAddrBookPhone(@PathVariable Integer id, @PathVariable String strPhone) {
         addressBookManager.editAddrBookEntry(id, strPhone);
         return "we managed to change record" + addressBookManager.findAddrBookEntry(id).toString();
     }

@@ -1,4 +1,4 @@
-package company;
+package com.gft.addressbook.company;
 
 public class AddressBookEntry {
     private Integer ID;

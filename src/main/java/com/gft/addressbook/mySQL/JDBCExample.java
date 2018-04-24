@@ -1,4 +1,4 @@
-package mySQL;
+package com.gft.addressbook.mySQL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
