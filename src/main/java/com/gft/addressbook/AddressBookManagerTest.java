@@ -1,6 +1,6 @@
 package com.gft.addressbook;
 
-import com.gft.addressbook.company.AddressBookManager;
+import com.gft.addressbook.model.AddressBookManager;
 
 public class AddressBookManagerTest {
 

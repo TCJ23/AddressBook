@@ -1,7 +1,7 @@
 package com.gft.addressbook;
 
-import com.gft.addressbook.company.AddressBookEntry;
-import com.gft.addressbook.company.AddressBookManager;
+import com.gft.addressbook.model.AddressBookEntry;
+import com.gft.addressbook.model.AddressBookManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -49,11 +49,11 @@ public class Main {
                     }
                     break;
                 case "4":
-                    System.out.println("You chose option to list all");
-                    for (AddressBookEntry addressBookEntry : addressBookManager.listAllAddrBookEntries()) {
-                        System.out.println(addressBookEntry.toString());
-                    }
-                    break;
+//                    System.out.println("You chose option to list all");
+//                    for (AddressBookEntry addressBookEntry : addressBookManager.listAllAddrBookEntries)) {
+//                        System.out.println(addressBookEntry.toString());
+//                    }
+//                    break;
                 case "5":
                     System.out.println("You chose option to edit your phone number");
                     Integer idToEdit = consoleInput.getFindAddrBookFromConsole();
@@ -88,7 +88,7 @@ public class Main {
             }
         }
     }
-
+/////////////// validować resta
     private static String makePhoneAmericanStd(ConsoleInput consoleInput) {
         String phoneToEdit = consoleInput.getPhoneNumberFromConsole().replaceAll("[^0-9]", "");
         while (phoneToEdit.length() != 10) {

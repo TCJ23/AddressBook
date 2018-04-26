@@ -1,6 +1,6 @@
 package com.gft.addressbook;
 
-import com.gft.addressbook.company.AddressBookEntry;
+import com.gft.addressbook.model.AddressBookEntry;
 
 import java.util.ArrayList;
 import java.util.Arrays;

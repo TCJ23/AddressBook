@@ -1,4 +1,4 @@
-package com.gft.addressbook.company;
+package com.gft.addressbook.model;
 
 public class AddressBookEntry {
     private Integer ID;
@@ -8,36 +8,19 @@ public class AddressBookEntry {
 
     @Override
     public String toString() {
-        return "ID: "+ID + " " + firstName + " " + lastName + " " + telePhone;
+        return "ID: " + ID + " " + firstName + " " + lastName + " " + telePhone;
     }
-
-//    @Override
-//    public boolean equals(Object obj) {
-//        if ()
-//    }
 
     public Integer getID() {
         return ID;
-    }
-
-    public void setID(Integer ID) {
-        this.ID = ID;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getLastName() {
         return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getTelePhone() {
@@ -53,6 +36,5 @@ public class AddressBookEntry {
         this.firstName = firstName;
         this.lastName = lastName;
         this.telePhone = telePhone;
-
     }
 }

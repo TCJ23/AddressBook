@@ -1,4 +1,4 @@
-package com.gft.addressbook.company;
+package com.gft.addressbook.model;
 
 import java.util.ArrayList;
 import java.util.Collection;

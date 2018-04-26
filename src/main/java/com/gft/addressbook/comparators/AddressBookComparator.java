@@ -1,6 +1,6 @@
 package com.gft.addressbook.comparators;
 
-import com.gft.addressbook.company.AddressBookEntry;
+import com.gft.addressbook.model.AddressBookEntry;
 
 import java.util.Comparator;
 
@@ -17,5 +17,4 @@ public class AddressBookComparator implements Comparator<AddressBookEntry> {
         }
         return result;
     }
-
 }

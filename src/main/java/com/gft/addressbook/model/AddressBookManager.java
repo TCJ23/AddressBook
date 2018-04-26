@@ -1,4 +1,4 @@
-package com.gft.addressbook.company;
+package com.gft.addressbook.model;
 
 import com.gft.addressbook.ConsoleInput;
 import com.gft.addressbook.CsvImporter;
@@ -11,15 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class AddressBookManager implements IAddressBookManager {
-    private List<AddressBookEntry> mainListOfAddressBookEntries = new ArrayList<>(); ///ID ISSUE
-//    ------------------------------------------------------------------------DAO IMPLEMENTATION -------------------------------------------------------------------------------------------------------------
-//    AddressBookEntryDAO dao = new AddressBookEntryDAO();
-//    private List<AddressBookEntry> mainListOfAddressBookEntries = new AddressBookList<>();
-//    private Set<Integer> uniqueIds = new TreeSet<>();
+    private List<AddressBookEntry> mainListOfAddressBookEntries = new ArrayList<>();
     private Integer counter = 0;
     ConsoleInput consoleInput = new ConsoleInput();
 
@@ -31,15 +26,8 @@ public class AddressBookManager implements IAddressBookManager {
             Path path = Paths.get("addressBook.csv");
             String csvFileContent = new String(Files.readAllBytes(path));
             List<AddressBookEntry> addressBookEntries = CsvImporter.importFromCSV(csvFileContent);
-
-//            for (AddressBookEntry addrBookValidation : addressBookEntries) {
-//                if (uniqueIds.add(addrBookValidation.getID()) == false){
-//                    throw new IllegalArgumentException("Duplicated ID" + addrBookValidation.getID());
-//                }
-//            }
-//            mainListOfAddressBookEntries.addAll(addressBookEntries); // ID ISSUE
-            for (AddressBookEntry addressBookEntryFromCSV : addressBookEntries) {
-                addAddrBookEntry(addressBookEntryFromCSV.getFirstName(),addressBookEntryFromCSV.getLastName(),addressBookEntryFromCSV.getTelePhone());
+            for (AddressBookEntry entry : addressBookEntries) {
+                addAddrBookEntry(entry.getFirstName(),entry.getLastName(),entry.getTelePhone());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,51 +36,49 @@ public class AddressBookManager implements IAddressBookManager {
             System.out.println(person.getID() + " " + person.getFirstName() + " " + person.getLastName() + " " + person.getTelePhone());
         }
     }
-///   -------------------------------------------------------------------------GENERATE DATA -------------------------------------------------------------------------------------------------------------
 
     @Override
     public void addAddrBookEntry(String strFirst, String strLast, String strPhone) {
         System.out.println(strFirst + " " + strLast + " " + strPhone);
         AddressBookEntry addressBookEntry1 = new AddressBookEntry(mainListOfAddressBookEntries.size(), strFirst, strLast, strPhone);
-//            if (uniqueIds.add(addressBookEntry1.getID()) == false){
-//                throw new IllegalArgumentException("Duplicated ID " + addressBookEntry1.getID());
-//            }
         mainListOfAddressBookEntries.add(addressBookEntry1);
     }
 
     @Override
-    public List<AddressBookEntry> listAllAddrBookEntries() {
-//        System.out.println("You chose option to list all");
-//        for (AddressBookEntry addressBookEntry : mainListOfAddressBookEntries) {
-//            System.out.println(addressBookEntry.toString());
-//        }
-        return mainListOfAddressBookEntries;
+    public Iterator<AddressBookEntry> listAllAddrBookEntries() {
+        return mainListOfAddressBookEntries.iterator();
     }
 
     @Override
     public List<AddressBookEntry> listAllSortedBookEntires() {
-//        List<AddressBookEntry> sortedList = new ArrayList<>(mainListOfAddressBookEntries);
         Comparator addressBookComparator = new AddressBookComparator();
         mainListOfAddressBookEntries.sort(addressBookComparator);
         return mainListOfAddressBookEntries;
     }
 
     @Override
-    public List<AddressBookEntry> listAllSortedBookEntires(String textToSort) throws InterruptedException {
+    public Iterator<AddressBookEntry> getAllAddrBookEntriesSrt(Comparator<AddressBookEntry> comparator) {
+        List<AddressBookEntry> copy = new ArrayList<>(mainListOfAddressBookEntries);
+        copy.sort(comparator);
+        return copy.iterator();
+    }
+
+    @Override
+    public List<AddressBookEntry> listAllSortedBookEntires(String textToSort) {
         Comparator addressBookComparator = new AddressBookComparator();
         if (textToSort.equalsIgnoreCase("1")) {
-            addressBookComparator = new AddressBookComparatorById();
+            addressBookComparator = ComparatorFactory.createComparator("id");
         } else if (textToSort.equalsIgnoreCase("2")) {
-            addressBookComparator = new AddressBookComparatorByFirstName();
+            addressBookComparator = ComparatorFactory.createComparator("firstname");
         } else if (textToSort.equalsIgnoreCase("3")) {
-            addressBookComparator = new AddressBookComparatorByLastName();
+            addressBookComparator = ComparatorFactory.createComparator("lastname");
         } else if (textToSort.equalsIgnoreCase("4")) {
-            addressBookComparator = new AddressBookComparatorByTelephone();
+            addressBookComparator = ComparatorFactory.createComparator("telephone");
         }
         else {
             System.out.println("You chose wrong option we did sorting for you");
             System.out.println("Going back to previous menu");
-            TimeUnit.SECONDS.sleep(5);
+//            TimeUnit.SECONDS.sleep(5);
         }
         mainListOfAddressBookEntries.sort(addressBookComparator);
         return mainListOfAddressBookEntries;
@@ -132,7 +118,6 @@ public class AddressBookManager implements IAddressBookManager {
     public AddressBookEntry findAddrBookEntry(Integer id) {
         for (AddressBookEntry addressBookEntry : mainListOfAddressBookEntries) {
             if (addressBookEntry.getID().equals(id)) {
-//                System.out.println(addressBookEntry.toString());
                 return addressBookEntry;
             }
         }

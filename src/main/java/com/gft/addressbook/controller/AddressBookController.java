@@ -1,11 +1,16 @@
 package com.gft.addressbook.controller;
 
 import com.gft.addressbook.IAddressBookManager;
-import com.gft.addressbook.company.AddressBookEntry;
+import com.gft.addressbook.comparators.*;
+import com.gft.addressbook.controller.view.AddressBookEntryView;
+import com.gft.addressbook.model.AddressBookEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -20,30 +25,47 @@ public class AddressBookController {
 
     /* find single record by ID */
     @GetMapping("/address/{id}")
-    public AddressBookEntry singleByID(@PathVariable(value = "id") Integer id){
+    public AddressBookEntry singleByID(@PathVariable(value = "id") Integer id) {
         return addressBookManager.findAddrBookEntry(id);
     }
-/*DEPRECATED
-    @GetMapping("/find/{textToSearch}")
-    public List<AddressBookEntry> findOne(@PathVariable String textToSearch) {
-        List<AddressBookEntry> adr = addressBookManager.findAddrBookEntry(textToSearch);
-        return adr;
+
+    /*DEPRECATED
+        @GetMapping("/find/{textToSearch}")
+        public List<AddressBookEntry> findOne(@PathVariable String textToSearch) {
+            List<AddressBookEntry> adr = addressBookManager.findAddrBookEntry(textToSearch);
+            return adr;
+        }
+        */
+    @GetMapping("/views")
+    /* HIDE ID BY VIEW */
+    public Iterator<AddressBookEntryView> viewingNoID() {
+        Iterator<AddressBookEntry> iterator = addressBookManager.listAllAddrBookEntries();
+        List<AddressBookEntryView> views = new ArrayList<>();
+        while (iterator.hasNext()) {
+            AddressBookEntryView view = new AddressBookEntryView();
+            AddressBookEntry model = iterator.next();
+            /// zamiana modelu na widok
+            view.setFirstName(model.getFirstName());
+            view.setLastName(model.getLastName());
+            view.setTelePhone(model.getTelePhone());
+            views.add(view);
+        }
+        return views.iterator();
     }
-    */
 
     /* Opt to list all addresses */
     @GetMapping("/addresses")
-    public List<AddressBookEntry> allAdrBook(){
-        return addressBookManager.listAllAddrBookEntries();
+    public Iterator<AddressBookEntry> allAdrBook(@RequestParam(required = false) String sortBy) {
+        if (sortBy == null) {
+            return addressBookManager.listAllAddrBookEntries();
+        }
+        Comparator<AddressBookEntry> comparator = ComparatorFactory.createComparator(sortBy);
+        return addressBookManager.getAllAddrBookEntriesSrt(comparator);
     }
 
-    /* opt to sort by variable*/
-    @GetMapping("/addresses/sort")
-    public List<AddressBookEntry> listAll(@RequestParam(value="sort", required = false, defaultValue="defaultSort") String textToSort) throws InterruptedException {
-        return addressBookManager.listAllSortedBookEntires(textToSort);
-    }
-
-    /** OPTION 6 */
+    /**
+     * OPTION 6
+     */
 
     @RequestMapping(path = "add/{strFirst}/{strLast}/{strPhone}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity addBookEntry(@PathVariable String strFirst, @PathVariable String strLast, @PathVariable String strPhone) {
