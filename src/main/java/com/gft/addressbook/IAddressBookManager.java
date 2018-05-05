@@ -1,5 +1,6 @@
 package com.gft.addressbook;
 
+import com.gft.addressbook.comparators.WrongSortTypeException;
 import com.gft.addressbook.model.AddressBookEntry;
 
 import java.util.Comparator;
@@ -16,7 +17,7 @@ public interface IAddressBookManager {
 
     List<AddressBookEntry> listAllSortedBookEntires();
 
-    List<AddressBookEntry> listAllSortedBookEntires(String textToSort);
+    List<AddressBookEntry> listAllSortedBookEntires(String textToSort) throws WrongSortTypeException;
 
     List<AddressBookEntry> findAddrBookEntry(String text);
 

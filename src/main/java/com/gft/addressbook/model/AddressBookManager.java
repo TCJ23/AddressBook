@@ -3,14 +3,19 @@ package com.gft.addressbook.model;
 import com.gft.addressbook.ConsoleInput;
 import com.gft.addressbook.CsvImporter;
 import com.gft.addressbook.IAddressBookManager;
-import com.gft.addressbook.comparators.*;
+import com.gft.addressbook.comparators.AddressBookComparator;
+import com.gft.addressbook.comparators.ComparatorFactory;
+import com.gft.addressbook.comparators.WrongSortTypeException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 @Component
 public class AddressBookManager implements IAddressBookManager {
@@ -27,7 +32,7 @@ public class AddressBookManager implements IAddressBookManager {
             String csvFileContent = new String(Files.readAllBytes(path));
             List<AddressBookEntry> addressBookEntries = CsvImporter.importFromCSV(csvFileContent);
             for (AddressBookEntry entry : addressBookEntries) {
-                addAddrBookEntry(entry.getFirstName(),entry.getLastName(),entry.getTelePhone());
+                addAddrBookEntry(entry.getFirstName(), entry.getLastName(), entry.getTelePhone());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,21 +69,24 @@ public class AddressBookManager implements IAddressBookManager {
     }
 
     @Override
-    public List<AddressBookEntry> listAllSortedBookEntires(String textToSort) {
-        Comparator addressBookComparator = new AddressBookComparator();
-        if (textToSort.equalsIgnoreCase("1")) {
-            addressBookComparator = ComparatorFactory.createComparator("id");
-        } else if (textToSort.equalsIgnoreCase("2")) {
-            addressBookComparator = ComparatorFactory.createComparator("firstname");
-        } else if (textToSort.equalsIgnoreCase("3")) {
-            addressBookComparator = ComparatorFactory.createComparator("lastname");
-        } else if (textToSort.equalsIgnoreCase("4")) {
-            addressBookComparator = ComparatorFactory.createComparator("telephone");
-        }
-        else {
-            System.out.println("You chose wrong option we did sorting for you");
-            System.out.println("Going back to previous menu");
+    public List<AddressBookEntry> listAllSortedBookEntires(String textToSort) throws WrongSortTypeException {
+        Comparator addressBookComparator = null;
+        try {
+            if (textToSort.equalsIgnoreCase("1")) {
+                addressBookComparator = ComparatorFactory.createComparator("id");
+            } else if (textToSort.equalsIgnoreCase("2")) {
+                addressBookComparator = ComparatorFactory.createComparator("firstname");
+            } else if (textToSort.equalsIgnoreCase("3")) {
+                addressBookComparator = ComparatorFactory.createComparator("lastname");
+            } else if (textToSort.equalsIgnoreCase("4")) {
+                addressBookComparator = ComparatorFactory.createComparator("telephone");
+            }
+//            else {
+//            System.out.println("You chose wrong option we did sorting for you");
+//            System.out.println("Going back to previous menu");
 //            TimeUnit.SECONDS.sleep(5);
+        } catch (WrongSortTypeException e) {
+            System.out.println(e.getCause().getMessage());
         }
         mainListOfAddressBookEntries.sort(addressBookComparator);
         return mainListOfAddressBookEntries;

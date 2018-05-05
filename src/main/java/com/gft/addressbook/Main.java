@@ -1,5 +1,6 @@
 package com.gft.addressbook;
 
+import com.gft.addressbook.comparators.WrongSortTypeException;
 import com.gft.addressbook.model.AddressBookEntry;
 import com.gft.addressbook.model.AddressBookManager;
 
@@ -75,8 +76,13 @@ public class Main {
                             " 3 -> Lastname, \n" +
                             " 4 -> TelephoneNumber, \n");
                     String textToSort = consoleInput.getTextToSort();
-                    for (AddressBookEntry addressBookEntry : addressBookManager.listAllSortedBookEntires(textToSort)) {
-                        System.out.println(addressBookEntry.toString());
+                    try {
+                        for (AddressBookEntry addressBookEntry : addressBookManager.listAllSortedBookEntires(textToSort)) {
+                            System.out.println(addressBookEntry.toString());
+                        }
+                    } catch (WrongSortTypeException e) {
+                        e.printStackTrace();
+                        e.getCause().getMessage();
                     }
                     break;
                 case "8":

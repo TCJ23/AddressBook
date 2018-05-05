@@ -1,7 +1,8 @@
 package com.gft.addressbook.controller;
 
 import com.gft.addressbook.IAddressBookManager;
-import com.gft.addressbook.comparators.*;
+import com.gft.addressbook.comparators.ComparatorFactory;
+import com.gft.addressbook.comparators.WrongSortTypeException;
 import com.gft.addressbook.controller.view.AddressBookEntryView;
 import com.gft.addressbook.model.AddressBookEntry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,13 +56,15 @@ public class AddressBookController {
 
     /* Opt to list all addresses */
     @GetMapping("/addresses")
-    public Iterator<AddressBookEntry> allAdrBook(@RequestParam(required = false) String sortBy) {
+    public Iterator<AddressBookEntry> allAdrBook(@RequestParam(required = false) String sortBy) throws WrongSortTypeException {
         if (sortBy == null) {
             return addressBookManager.listAllAddrBookEntries();
         }
         Comparator<AddressBookEntry> comparator = ComparatorFactory.createComparator(sortBy);
         return addressBookManager.getAllAddrBookEntriesSrt(comparator);
     }
+// po zlapaniu zlego stringa compafactory exc lapie i zwracam null - pusty iterator -> response entity ok i lista
+    // zle sort by 400
 
     /**
      * OPTION 6

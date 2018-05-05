@@ -6,17 +6,20 @@ import java.util.Comparator;
 
 public class ComparatorFactory {
 
-    public static Comparator<AddressBookEntry> createComparator(String type){
-        Comparator addressBookComparator = new AddressBookComparator();
+    public static Comparator<AddressBookEntry> createComparator(String type) throws WrongSortTypeException {
+
+//        Comparator addressBookComparator = new AddressBookComparator();
         if (type.equalsIgnoreCase("id")) {
-            addressBookComparator = new AddressBookComparatorById();
+            return  new AddressBookComparatorById();
         } else if (type.equalsIgnoreCase("firstname")) {
-            addressBookComparator = new AddressBookComparatorByFirstName();
+            return new AddressBookComparatorByFirstName();
         } else if (type.equalsIgnoreCase("lastname")) {
-            addressBookComparator = new AddressBookComparatorByLastName();
+            return new AddressBookComparatorByLastName();
         } else if (type.equalsIgnoreCase("telephone")) {
-            addressBookComparator = new AddressBookComparatorByTelephone();
+           return new AddressBookComparatorByTelephone();
+        } else {
+            throw new WrongSortTypeException();
         }
-        return addressBookComparator;
+//        return addressBookComparator;
     }
 }
