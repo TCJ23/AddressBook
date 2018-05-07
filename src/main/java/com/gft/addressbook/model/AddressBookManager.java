@@ -114,8 +114,8 @@ public class AddressBookManager implements IAddressBookManager {
         } catch (Exception e) {
         }
         for (AddressBookEntry addressBookEntryText : mainListOfAddressBookEntries) {
-            if (addressBookEntryText.getFirstName().contains(text) ||
-                    addressBookEntryText.getLastName().contains(text) || addressBookEntryText.getTelePhone().contains(text) || addressBookEntryText.getID().equals(textToInt)) {
+            if (addressBookEntryText.getFirstName().trim().toLowerCase().contains(text) ||
+                    addressBookEntryText.getLastName().trim().toLowerCase().contains(text) || addressBookEntryText.getTelePhone().trim().toLowerCase().contains(text) || addressBookEntryText.getID().equals(textToInt)) {
                 list.add(addressBookEntryText);
             }
         }

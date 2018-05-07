@@ -1,10 +1,13 @@
 package com.gft.addressbook;
 
+import com.gft.addressbook.comparators.AddressBookComparator;
+import com.gft.addressbook.comparators.ComparatorFactory;
 import com.gft.addressbook.comparators.WrongSortTypeException;
 import com.gft.addressbook.model.AddressBookEntry;
 import com.gft.addressbook.model.AddressBookManager;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 public class Main {
@@ -76,14 +79,22 @@ public class Main {
                             " 3 -> Lastname, \n" +
                             " 4 -> TelephoneNumber, \n");
                     String textToSort = consoleInput.getTextToSort();
+                    Comparator<AddressBookEntry> addressBookComparator = null;
                     try {
-                        for (AddressBookEntry addressBookEntry : addressBookManager.listAllSortedBookEntires(textToSort)) {
-                            System.out.println(addressBookEntry.toString());
+                        if (textToSort.equalsIgnoreCase("1")) {
+                            addressBookComparator = ComparatorFactory.createComparator("id");
+                        } else if (textToSort.equalsIgnoreCase("2")) {
+                            addressBookComparator = ComparatorFactory.createComparator("firstname");
+                        } else if (textToSort.equalsIgnoreCase("2")) {
+                            addressBookComparator = ComparatorFactory.createComparator("lastname");
+                        } else if (textToSort.equalsIgnoreCase("2")) {
+                            addressBookComparator = ComparatorFactory.createComparator("telephone");
+                        } else {
+                            addressBookComparator = new AddressBookComparator();
                         }
-                    } catch (WrongSortTypeException e) {
-                        e.printStackTrace();
-                        e.getCause().getMessage();
+                    } catch (WrongSortTypeException wrng) {
                     }
+                    System.out.println(addressBookManager.getAllAddrBookEntriesSrt(addressBookComparator).toString());
                     break;
                 case "8":
                     System.out.println("You chose option to exit");
@@ -94,7 +105,8 @@ public class Main {
             }
         }
     }
-/////////////// validować resta
+
+    /////////////// validować resta
     private static String makePhoneAmericanStd(ConsoleInput consoleInput) {
         String phoneToEdit = consoleInput.getPhoneNumberFromConsole().replaceAll("[^0-9]", "");
         while (phoneToEdit.length() != 10) {
