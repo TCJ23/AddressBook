@@ -69,7 +69,7 @@ public class AddressBookManager implements IAddressBookManager {
     }
 
     @Override
-    public List<AddressBookEntry> listAllSortedBookEntires(String textToSort) throws WrongSortTypeException {
+    public List<AddressBookEntry> listAllSortedBookEntires(String textToSort) {
         Comparator addressBookComparator = null;
         try {
             if (textToSort.equalsIgnoreCase("1")) {

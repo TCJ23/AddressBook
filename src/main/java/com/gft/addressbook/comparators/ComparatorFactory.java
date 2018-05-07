@@ -18,7 +18,7 @@ public class ComparatorFactory {
         } else if (type.equalsIgnoreCase("telephone")) {
            return new AddressBookComparatorByTelephone();
         } else {
-            throw new WrongSortTypeException();
+            throw new WrongSortTypeException(type);
         }
 //        return addressBookComparator;
     }
