@@ -1,8 +1,8 @@
 package com.gft.addressbook;
 
-import com.gft.addressbook.comparators.AddressBookComparator;
-import com.gft.addressbook.comparators.ComparatorFactory;
-import com.gft.addressbook.comparators.WrongSortTypeException;
+import com.gft.addressbook.sort.AddressBookComparator;
+import com.gft.addressbook.sort.ComparatorFactory;
+import com.gft.addressbook.sort.WrongSortTypeException;
 import com.gft.addressbook.model.AddressBookEntry;
 import com.gft.addressbook.model.AddressBookManager;
 
@@ -57,7 +57,7 @@ public class Main {
 //                    for (AddressBookEntry addressBookEntry : addressBookManager.listAllAddrBookEntries)) {
 //                        System.out.println(addressBookEntry.toString());
 //                    }
-//                    break;
+                    break;
                 case "5":
                     System.out.println("You chose option to edit your phone number");
                     Integer idToEdit = consoleInput.getFindAddrBookFromConsole();
@@ -94,7 +94,7 @@ public class Main {
                         }
                     } catch (WrongSortTypeException wrng) {
                     }
-                    System.out.println(addressBookManager.getAllAddrBookEntriesSrt(addressBookComparator).toString());
+                    addressBookManager.getAllAddrBookEntriesSrt(addressBookComparator).forEachRemaining(addressBookEntry -> System.out.println(addressBookEntry.toString()));
                     break;
                 case "8":
                     System.out.println("You chose option to exit");

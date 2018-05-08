@@ -1,4 +1,4 @@
-package com.gft.addressbook.comparators;
+package com.gft.addressbook.sort;
 
 
 import com.gft.addressbook.model.AddressBookEntry;

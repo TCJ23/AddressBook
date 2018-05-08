@@ -3,9 +3,9 @@ package com.gft.addressbook.model;
 import com.gft.addressbook.ConsoleInput;
 import com.gft.addressbook.CsvImporter;
 import com.gft.addressbook.IAddressBookManager;
-import com.gft.addressbook.comparators.AddressBookComparator;
-import com.gft.addressbook.comparators.ComparatorFactory;
-import com.gft.addressbook.comparators.WrongSortTypeException;
+import com.gft.addressbook.sort.AddressBookComparator;
+import com.gft.addressbook.sort.ComparatorFactory;
+import com.gft.addressbook.sort.WrongSortTypeException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -114,12 +114,19 @@ public class AddressBookManager implements IAddressBookManager {
         } catch (Exception e) {
         }
         for (AddressBookEntry addressBookEntryText : mainListOfAddressBookEntries) {
-            if (addressBookEntryText.getFirstName().trim().toLowerCase().contains(text) ||
-                    addressBookEntryText.getLastName().trim().toLowerCase().contains(text) || addressBookEntryText.getTelePhone().trim().toLowerCase().contains(text) || addressBookEntryText.getID().equals(textToInt)) {
+            if ( contains(addressBookEntryText.getFirstName(), text) ||
+                    contains(addressBookEntryText.getLastName(), text) ||
+                    contains(addressBookEntryText.getTelePhone(), text) ||
+                    addressBookEntryText.getID().equals(textToInt))
+            {
                 list.add(addressBookEntryText);
             }
         }
         return list;
+    }
+
+    private boolean contains(String db, String input) {
+        return db.toLowerCase().contains(input.trim().toLowerCase());
     }
 
     @Override

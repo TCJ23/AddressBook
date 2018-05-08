@@ -1,4 +1,4 @@
-package com.gft.addressbook.comparators;
+package com.gft.addressbook.sort;
 
 public class WrongSortTypeException extends Exception {
     public WrongSortTypeException(String type) {

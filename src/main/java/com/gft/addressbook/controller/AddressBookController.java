@@ -1,8 +1,8 @@
 package com.gft.addressbook.controller;
 
 import com.gft.addressbook.IAddressBookManager;
-import com.gft.addressbook.comparators.ComparatorFactory;
-import com.gft.addressbook.comparators.WrongSortTypeException;
+import com.gft.addressbook.sort.ComparatorFactory;
+import com.gft.addressbook.sort.WrongSortTypeException;
 import com.gft.addressbook.controller.view.AddressBookEntryView;
 import com.gft.addressbook.model.AddressBookEntry;
 import org.springframework.beans.factory.annotation.Autowired;

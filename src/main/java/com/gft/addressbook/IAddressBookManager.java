@@ -1,6 +1,6 @@
 package com.gft.addressbook;
 
-import com.gft.addressbook.comparators.WrongSortTypeException;
+import com.gft.addressbook.sort.WrongSortTypeException;
 import com.gft.addressbook.model.AddressBookEntry;
 
 import java.util.Comparator;
