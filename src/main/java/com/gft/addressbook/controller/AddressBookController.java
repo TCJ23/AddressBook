@@ -1,112 +1,79 @@
 package com.gft.addressbook.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gft.addressbook.IAddressBookManager;
-import com.gft.addressbook.sort.ComparatorFactory;
-import com.gft.addressbook.sort.WrongSortTypeException;
-import com.gft.addressbook.controller.view.AddressBookEntryView;
 import com.gft.addressbook.model.AddressBookEntry;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @RestController
+@JsonFormat(shape=JsonFormat.Shape.ARRAY)
+
 public class AddressBookController {
     //    @Autowired // pole -> setter -> konstruktor
+    @Autowired
     private IAddressBookManager addressBookManager;
 
-    @Autowired
-    public AddressBookController(IAddressBookManager addressBookManager) {
-        this.addressBookManager = addressBookManager;
+    @GetMapping("/addressBooks")
+    public Iterator<AddressBookEntry> getall(){
+        return addressBookManager.getAll();
     }
 
-    /* find single record by ID */
-    @GetMapping("/address/{id}")
-    public AddressBookEntry singleByID(@PathVariable(value = "id") Integer id) {
-        return addressBookManager.findAddrBookEntry(id);
-    }
-
-    /*DEPRECATED
-        @GetMapping("/find/{textToSearch}")
-        public List<AddressBookEntry> findOne(@PathVariable String textToSearch) {
-            List<AddressBookEntry> adr = addressBookManager.findAddrBookEntry(textToSearch);
-            return adr;
+    @GetMapping("/addressBooks/{id}")
+    public AddressBookEntry getbyId(@PathVariable Long id){
+        Optional<AddressBookEntry> addressBookEntry = addressBookManager.getbyId(id);
+        if (addressBookEntry.isPresent()){
+            return addressBookEntry.get();
         }
-        */
-    @GetMapping("/views")
-    /* HIDE ID BY VIEW */
-    public Iterator<AddressBookEntryView> viewingNoID() {
-        Iterator<AddressBookEntry> iterator = addressBookManager.listAllAddrBookEntries();
-        List<AddressBookEntryView> views = new ArrayList<>();
-        while (iterator.hasNext()) {
-            AddressBookEntryView view = new AddressBookEntryView();
-            AddressBookEntry model = iterator.next();
-            /// zamiana modelu na widok
-            view.setFirstName(model.getFirstName());
-            view.setLastName(model.getLastName());
-            view.setTelePhone(model.getTelePhone());
-            views.add(view);
+        else {
+            return null;// future exception handling
         }
-        return views.iterator();
     }
 
-    /* Opt to list all addresses */
-    @GetMapping("/addresses")
-    public Iterator<AddressBookEntry> allAdrBook(@RequestParam(required = false) String sortBy) throws WrongSortTypeException {
-        if (sortBy == null) {
-            return addressBookManager.listAllAddrBookEntries();
+    @PostMapping("/addressBooks")
+    public Long create(@RequestBody AddressBookEntry addressBookEntry){
+        return addressBookManager.create(addressBookEntry);
+    }
+
+    @PutMapping("/addressBooks/{id}")
+    public void put(@PathVariable Long id, @RequestBody AddressBookEntry userdata) {
+        Optional<AddressBookEntry> bookEntry = addressBookManager.getbyId(id);
+        if (bookEntry.isPresent()) {
+            updateModel(userdata, bookEntry);
         }
-        Comparator<AddressBookEntry> comparator = ComparatorFactory.createComparator(sortBy);
-        return addressBookManager.getAllAddrBookEntriesSrt(comparator);
-    }
-// po zlapaniu zlego stringa compafactory exc lapie i zwracam null - pusty iterator -> response entity ok i lista
-    // zle sort by 400
-
-    /**
-     * OPTION 6
-     */
-
-    @RequestMapping(path = "add/{strFirst}/{strLast}/{strPhone}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity addBookEntry(@PathVariable String strFirst, @PathVariable String strLast, @PathVariable String strPhone) {
-        addressBookManager.addAddrBookEntry(strFirst, strLast, strPhone);
-        return ResponseEntity.ok("We created following record: " + strFirst + strLast + strPhone);
+        // TO DO
+        else {} // future exception handling
     }
 
-// ----------------------------------------------------------- OPTION 3 ----------------------------------------------------------------
-
-    @RequestMapping(path = "delete/{id}", method = RequestMethod.DELETE)
-    public String removeAddrBookEntry(@PathVariable Integer id) {
-        return "you deleted record: " + addressBookManager.removeAddrBookEntry(id);
+    private void updateModel(@RequestBody AddressBookEntry userdata, Optional<AddressBookEntry> bookEntry) {
+        AddressBookEntry dbEntity = bookEntry.get();
+        if(userdata.getFirstName() != null){
+            dbEntity.setFirstName(userdata.getFirstName());
+        }
+        if(userdata.getLastName() != null) {
+            dbEntity.setLastName(userdata.getLastName());
+        }
+        if (userdata.getTelePhone()!= null)
+        {
+            dbEntity.setTelePhone(userdata.getTelePhone());
+        }
+        addressBookManager.update(dbEntity);
     }
 
-// ----------------------------------------------------------- OPTION 4 ----------------------------------------------------------------
-
-    @RequestMapping(path = "updatePhone/{id}/{strPhone}", method = RequestMethod.PUT)
-    public String updateAddrBookPhone(@PathVariable Integer id, @PathVariable String strPhone) {
-        addressBookManager.editAddrBookEntry(id, strPhone);
-        return "we managed to change record" + addressBookManager.findAddrBookEntry(id).toString();
+    @DeleteMapping("/addressBooks/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        Optional<AddressBookEntry> addressBookEntry = addressBookManager.getbyId(id);
+        if (addressBookEntry.isPresent()){
+            addressBookManager.delete(addressBookEntry.get());
+        }
+        else {} // future exception handling
+    //     LAMBA      addressBookEntry.ifPresent(entry ->addressBookManager.delete(entry) );
+    //METHOD REFERENC addressBookEntry.ifPresent(addressBookManager::delete);
     }
-//    @RequestMapping(path = "findMultiple/{s1}/{s2}", method = RequestMethod.GET, produces = "application/json")
-//    public String addTwoStrings(@PathVariable String s1, @PathVariable String s2) {
-//        return s1 + s2;
-//    }
-//    @RequestMapping(path = "findMultiple+Int/{s1}/{s2}/{i1}", method = RequestMethod.GET, produces = "application/json")
-//    public String addTwoStringsWithInteger(@PathVariable String s1, @PathVariable String s2, @PathVariable Integer i1) {
-//        return i1 + s1 + s2 ;
-//    }
-//    @GetMapping("hello")
-//    @RequestMapping(path = "addressBook", method = RequestMethod.GET, produces = "application/json")
-//    public String getHello() {
-//        return "ADDRESS BOOK";
-//    }
-    //    @DeleteMapping("remove/{id}")
-//    ResponseEntity delete(@PathVariable Integer id) {
-//        addressBookManager.removeAddrBookEntry(id);
-//        return ResponseEntity.ok("We removed record with ID :" + id);
 }
 
 

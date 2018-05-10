@@ -14,7 +14,7 @@ public class CsvImporter {
         List<AddressBookEntry> addressBookEntriesCSV = new ArrayList<>();
         for (String line : getAllLines) {
             String[] pole = line.split(",");
-            Integer idOfRecord = Integer.parseInt(pole[0]);
+            Long idOfRecord = Long.parseLong(pole[0]);
             String firstname = pole[1];
             String lastname = pole[2];
             String phoneNumber = pole[3];

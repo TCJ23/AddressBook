@@ -1,29 +1,19 @@
 package com.gft.addressbook;
 
-import com.gft.addressbook.sort.WrongSortTypeException;
 import com.gft.addressbook.model.AddressBookEntry;
 
-import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Optional;
 
 public interface IAddressBookManager {
 
-    void addAddrBookEntry(String strFirst, String strLast, String strPhone);
+    public Iterator<AddressBookEntry> getAll();
 
-    Iterator<AddressBookEntry> listAllAddrBookEntries();
+    public Long create(AddressBookEntry addressBookEntry);
 
-    Iterator<AddressBookEntry> getAllAddrBookEntriesSrt(Comparator<AddressBookEntry> comparator);
+    public void delete(AddressBookEntry addressBookEntry);
 
-    List<AddressBookEntry> listAllSortedBookEntires();
+    public Optional<AddressBookEntry> getbyId(Long id);
 
-    List<AddressBookEntry> listAllSortedBookEntires(String textToSort) throws WrongSortTypeException;
-
-    List<AddressBookEntry> findAddrBookEntry(String text);
-
-    AddressBookEntry findAddrBookEntry(Integer id);
-
-    boolean removeAddrBookEntry(Integer id);
-
-    void editAddrBookEntry(Integer id, String phoneNumber);
+    public void update(AddressBookEntry addressBookEntry);
 }
