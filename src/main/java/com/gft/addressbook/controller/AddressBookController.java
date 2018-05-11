@@ -11,9 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
@@ -39,8 +38,22 @@ public class AddressBookController {
     }
 
     @PostMapping("/addressBooks")
-    public Long create(@RequestBody AddressBookEntry addressBookEntry) {
-        return addressBookManager.create(addressBookEntry);
+    public List<Long> create(@RequestBody List<AddressBookEntry> addressBookEntries) {
+/*  REGULAR FOR EACH
+        List<Long> IDs = new ArrayList<>();
+        for (AddressBookEntry bookEntry : addressBookEntries) {
+            IDs.add(addressBookManager.create(bookEntry));
+        }
+*/
+/*  LAMBDA + FOR EACH
+        addressBookEntries.forEach(bookEntry -> IDs.add(addressBookManager.create(bookEntry)));
+        return IDs;
+*/
+
+/* STREAM */
+    return addressBookEntries.stream()
+            .map(bookEntry -> addressBookManager.create(bookEntry))
+            .collect(Collectors.toList());
     }
 
     @PutMapping("/addressBooks/{id}")
