@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,9 @@ public class AddressBookController {
     @GetMapping("/addressBooks")
     public Iterator<AddressBookEntry> getall(@RequestParam(value = "search", required = false) String search) {
         if (search != null) {
-            return addressBookManager.get(new SearchCriteria(search));
+            HashSet<SearchCriteria> hashSet = new HashSet<>();
+            hashSet.add(new SearchCriteria(search));
+            return addressBookManager.get(hashSet);
         } else {
             return addressBookManager.getAll();
         }
