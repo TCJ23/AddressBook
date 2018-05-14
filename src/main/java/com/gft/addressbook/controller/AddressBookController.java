@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gft.addressbook.IAddressBookManager;
 import com.gft.addressbook.exceptions.IdNotFoundException;
 import com.gft.addressbook.model.AddressBookEntry;
+import com.gft.addressbook.model.criteria.SearchCriteria;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -23,8 +26,12 @@ public class AddressBookController {
     private IAddressBookManager addressBookManager;
 
     @GetMapping("/addressBooks")
-    public Iterator<AddressBookEntry> getall() {
-        return addressBookManager.getAll();
+    public Iterator<AddressBookEntry> getall(@RequestParam(value = "search", required = false) String search) {
+        if (search != null) {
+            return addressBookManager.get(new SearchCriteria(search));
+        } else {
+            return addressBookManager.getAll();
+        }
     }
 
     @GetMapping("/addressBooks/{id}")
@@ -49,11 +56,10 @@ public class AddressBookController {
         addressBookEntries.forEach(bookEntry -> IDs.add(addressBookManager.create(bookEntry)));
         return IDs;
 */
-
-/* STREAM */
-    return addressBookEntries.stream()
-            .map(bookEntry -> addressBookManager.create(bookEntry))
-            .collect(Collectors.toList());
+        /* STREAM */
+        return addressBookEntries.stream()
+                .map(bookEntry -> addressBookManager.create(bookEntry))
+                .collect(Collectors.toList());
     }
 
     @PutMapping("/addressBooks/{id}")
@@ -94,8 +100,9 @@ public class AddressBookController {
         //     LAMBA      addressBookEntry.ifPresent(entry ->addressBookManager.delete(entry) );
         //METHOD REFERENC addressBookEntry.ifPresent(addressBookManager::delete);
     }
+
     @ExceptionHandler({IdNotFoundException.class})
-    private ResponseEntity handler(IdNotFoundException e){
+    private ResponseEntity handler(IdNotFoundException e) {
 //        HashMap<String, Object> handlerMap = new HashMap<>();
 //        handlerMap.put("code", HttpStatus.NOT_FOUND.value());
 //        handlerMap.put("message", e.getMessage());

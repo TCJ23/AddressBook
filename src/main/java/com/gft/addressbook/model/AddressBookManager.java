@@ -2,16 +2,24 @@ package com.gft.addressbook.model;
 
 import com.gft.addressbook.IAddressBookManager;
 import com.gft.addressbook.dao.IAddressBookEntryDAO;
+import com.gft.addressbook.model.criteria.AddressBookEntrySpecification;
+import com.gft.addressbook.model.criteria.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class AddressBookManager implements IAddressBookManager {
     @Autowired
     private IAddressBookEntryDAO addressBookEntryDAO;
+
+    @Override
+    public Iterator<AddressBookEntry> get(SearchCriteria searchCriteriaList) {
+        return addressBookEntryDAO.findAll(new AddressBookEntrySpecification(searchCriteriaList)).iterator();
+    }
 
     @Override
     public Iterator<AddressBookEntry> getAll() {
