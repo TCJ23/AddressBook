@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class AddressBookEntrySpecification implements Specification<AddressBookEntry> {
+    /// strictly HIBERNATE -> turn SearchCriteria into database query ONLY GET
 
     private Collection<SearchCriteria> criteria;
 
