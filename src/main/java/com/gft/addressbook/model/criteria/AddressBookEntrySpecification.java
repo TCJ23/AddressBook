@@ -18,7 +18,7 @@ public class AddressBookEntrySpecification implements Specification<AddressBookE
     private Collection<SearchCriteria> criteria;
 
     public AddressBookEntrySpecification(Collection<SearchCriteria> criteria) {
-        if (criteria != null || criteria.isEmpty()) {
+        if (criteria == null || criteria.isEmpty()) {
             throw new IllegalArgumentException("Criteria mustn't be empty");
         } else {
             this.criteria = criteria;
