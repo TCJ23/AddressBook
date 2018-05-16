@@ -11,12 +11,16 @@ import java.util.regex.Pattern;
 @Setter
 @EqualsAndHashCode
 public class SearchCriteria {
+    private static final Pattern pattern = Pattern.compile("(\\w+?)(:)(\\w+?)");
     private String property;
     private String operation;
     private Object value;
 
-    public SearchCriteria(String search) {
-        Pattern pattern = Pattern.compile("(\\w+?)(:)(\\w+?)");
+    public static SearchCriteriaBuilder builder() {
+        return new SearchCriteriaBuilder();
+    }
+
+    SearchCriteria(String search) {
         Matcher matcher = pattern.matcher(search);
         if (matcher.find()) {
             property = matcher.group(1);

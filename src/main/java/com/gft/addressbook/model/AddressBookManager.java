@@ -17,7 +17,7 @@ public class AddressBookManager implements IAddressBookManager {
     private IAddressBookEntryDAO addressBookEntryDAO;
 
     @Override
-    public Iterator<AddressBookEntry> get(SearchCriteria searchCriteriaList) {
+    public Iterator<AddressBookEntry> get(Set<SearchCriteria> searchCriteriaList) {
         return addressBookEntryDAO.findAll(new AddressBookEntrySpecification(searchCriteriaList)).iterator();
     }
 

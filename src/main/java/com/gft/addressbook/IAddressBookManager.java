@@ -12,7 +12,7 @@ public interface IAddressBookManager {
 
     public Iterator<AddressBookEntry> getAll();
 
-    public Iterator<AddressBookEntry> get(SearchCriteria searchCriteriaList);
+    public Iterator<AddressBookEntry> get(Set<SearchCriteria> searchCriteriaList);
 
     public Long create(AddressBookEntry addressBookEntry);
 

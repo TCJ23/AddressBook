@@ -5,8 +5,10 @@ import com.gft.addressbook.IAddressBookManager;
 import com.gft.addressbook.exceptions.IdNotFoundException;
 import com.gft.addressbook.model.AddressBookEntry;
 import com.gft.addressbook.model.criteria.SearchCriteria;
+import com.gft.addressbook.model.criteria.SearchCriteriaBuilder;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +29,12 @@ public class AddressBookController {
 
     @GetMapping("/addressBooks")
     public Iterator<AddressBookEntry> getall(@RequestParam(value = "search", required = false) String search) {
-        if (search != null) {
-            return addressBookManager.get(new SearchCriteria(search));
+        if (StringUtils.isNotBlank(search)) {
+            SearchCriteriaBuilder builder = SearchCriteria.builder();
+            for (String s : StringUtils.split(search, ",")) {
+                builder.searchBy(s);
+            }
+            return addressBookManager.get(builder.buildResult());
         } else {
             return addressBookManager.getAll();
         }
