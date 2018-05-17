@@ -1,4 +1,4 @@
-package com.gft.addressbook.exceptions;
+package com.gft.addressbook.controller.exceptions;
 
 
 public class IdNotFoundException extends Exception {

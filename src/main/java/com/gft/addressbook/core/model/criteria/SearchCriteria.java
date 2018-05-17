@@ -1,4 +1,4 @@
-package com.gft.addressbook.model.criteria;
+package com.gft.addressbook.core.model.criteria;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

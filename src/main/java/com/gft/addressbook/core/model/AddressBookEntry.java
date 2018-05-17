@@ -1,4 +1,4 @@
-package com.gft.addressbook.model;
+package com.gft.addressbook.core.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

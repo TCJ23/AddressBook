@@ -1,11 +1,10 @@
 package com.gft.addressbook.controller;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.gft.addressbook.IAddressBookManager;
-import com.gft.addressbook.exceptions.IdNotFoundException;
-import com.gft.addressbook.model.AddressBookEntry;
-import com.gft.addressbook.model.criteria.SearchCriteria;
-import com.gft.addressbook.model.criteria.SearchCriteriaBuilder;
+import com.gft.addressbook.controller.exceptions.IdNotFoundException;
+import com.gft.addressbook.core.manager.IAddressBookManager;
+import com.gft.addressbook.core.model.AddressBookEntry;
+import com.gft.addressbook.core.model.criteria.SearchCriteria;
+import com.gft.addressbook.core.model.criteria.SearchCriteriaBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +19,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 
 public class AddressBookController {
     //    @Autowired // pole -> setter -> konstruktor
@@ -28,16 +26,19 @@ public class AddressBookController {
     private IAddressBookManager addressBookManager;
 
     @GetMapping("/addressBooks")
-    public Iterator<AddressBookEntry> getall(@RequestParam(value = "search", required = false) String search) {
+    public Iterator<AddressBookEntry> getall(@RequestParam(value = "search", required = false) String search,
+                                             @RequestParam(value = "sort", required = false) String sort) {
+        SearchCriteriaBuilder builder = SearchCriteria.builder();
         if (StringUtils.isNotBlank(search)) {
-            SearchCriteriaBuilder builder = SearchCriteria.builder();
             for (String s : StringUtils.split(search, ",")) {
                 builder.searchBy(s);
             }
-            return addressBookManager.get(builder.buildResult());
-        } else {
-            return addressBookManager.getAll();
         }
+        if (StringUtils.isNotBlank(sort)){
+            String[] sorting = StringUtils.split(sort, ":");
+            builder.sortBy(sorting[0], SearchCriteriaBuilder.SortOrder.fromString(sorting[1]));
+        }
+        return addressBookManager.get(builder.buildResult());
     }
 
     @GetMapping("/addressBooks/{id}")

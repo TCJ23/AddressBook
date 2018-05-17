@@ -1,6 +1,6 @@
-package com.gft.addressbook.model.criteria;
+package com.gft.addressbook.core.model.criteria;
 
-import com.gft.addressbook.model.AddressBookEntry;
+import com.gft.addressbook.core.model.AddressBookEntry;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -18,16 +18,17 @@ public class AddressBookEntrySpecification implements Specification<AddressBookE
     private Collection<SearchCriteria> criteria;
 
     public AddressBookEntrySpecification(Collection<SearchCriteria> criteria) {
-        if (criteria == null || criteria.isEmpty()) {
-            throw new IllegalArgumentException("Criteria mustn't be empty");
-        } else {
-            this.criteria = criteria;
-        }
+
+        this.criteria = criteria;
     }
+
 
     @Override
     public Predicate toPredicate
             (Root<AddressBookEntry> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+        if (criteria == null || criteria.isEmpty()) {
+            return builder.disjunction();
+        }
         List<Predicate> predicates = new ArrayList<>();
         for (SearchCriteria element : criteria) {
             Optional<Predicate> predicate = internalBuild(root, builder, element);
