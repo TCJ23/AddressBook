@@ -9,8 +9,16 @@ public class SearchCriteriaBuilder {
 
     private Sort sort;
     private Set<SearchCriteria> searchCriteriaSet = new HashSet<SearchCriteria>();
+    private Integer size;
+    private Integer page;
 
     SearchCriteriaBuilder() {
+    }
+
+    public SearchCriteriaBuilder paging(int size, int page) {
+        this.size = size;
+        this.page = page;
+        return this;
     }
 
     public SearchCriteriaBuilder searchBy(String s) {
@@ -19,7 +27,7 @@ public class SearchCriteriaBuilder {
     }
 
     public AddressBookRequest buildResult() {
-        return AddressBookRequest.instance(new HashSet<>(searchCriteriaSet), sort);
+        return AddressBookRequest.instance(new HashSet<>(searchCriteriaSet), sort, size, page);
     }
 
     public SearchCriteriaBuilder sortBy(String property, SortOrder sortOrder) {
@@ -33,7 +41,6 @@ public class SearchCriteriaBuilder {
         ASC(Sort.Direction.ASC), DESC(Sort.Direction.DESC);//SINGLETON
         private Sort.Direction order;
 
-
         SortOrder(Sort.Direction order) {
             this.order = order;
         }
@@ -41,7 +48,8 @@ public class SearchCriteriaBuilder {
         private Sort.Direction getJpaOrder() {
             return order;
         }
-        public static SortOrder fromString (String sort){
+
+        public static SortOrder fromString(String sort) {
             String s = sort.trim().toUpperCase();
             return SortOrder.valueOf(s);
         }

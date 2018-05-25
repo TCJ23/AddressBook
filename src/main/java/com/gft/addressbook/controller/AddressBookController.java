@@ -27,17 +27,29 @@ public class AddressBookController {
 
     @GetMapping("/addressBooks")
     public Iterator<AddressBookEntry> getall(@RequestParam(value = "search", required = false) String search,
-                                             @RequestParam(value = "sort", required = false) String sort) {
+                                             @RequestParam(value = "sort", required = false) String sort,
+                                             @RequestParam(value = "pageNumber", required = false) Integer page,/* może być */
+                                             @RequestParam(value = "pageSize", required = false) Integer size /* musi być */) {
         SearchCriteriaBuilder builder = SearchCriteria.builder();
         if (StringUtils.isNotBlank(search)) {
             for (String s : StringUtils.split(search, ",")) {
                 builder.searchBy(s);
             }
         }
-        if (StringUtils.isNotBlank(sort)){
+        if (StringUtils.isNotBlank(sort)) {
             String[] sorting = StringUtils.split(sort, ":");
             builder.sortBy(sorting[0], SearchCriteriaBuilder.SortOrder.fromString(sorting[1]));
         }
+//        if (size != null) {
+//            if (page != null) {
+//                builder.paging(size, page - 1);//starting from 0
+//            } else {
+//                builder.paging(size, 0);
+//            }
+//        }
+//        else if (page != null && size == null){
+//            throw new IllegalArgumentException("TO DO !!!!!!!!!!");
+//        }
         return addressBookManager.get(builder.buildResult());
     }
 
