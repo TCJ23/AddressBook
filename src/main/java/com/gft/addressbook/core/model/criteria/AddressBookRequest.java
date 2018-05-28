@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import java.util.Set;
 
 @Getter
+//DATA WRAPPER
 public class AddressBookRequest {
 
     private Set<SearchCriteria> searchCriteriaSet;

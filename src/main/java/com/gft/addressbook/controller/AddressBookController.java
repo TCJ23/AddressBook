@@ -40,16 +40,16 @@ public class AddressBookController {
             String[] sorting = StringUtils.split(sort, ":");
             builder.sortBy(sorting[0], SearchCriteriaBuilder.SortOrder.fromString(sorting[1]));
         }
-//        if (size != null) {
-//            if (page != null) {
-//                builder.paging(size, page - 1);//starting from 0
-//            } else {
-//                builder.paging(size, 0);
-//            }
-//        }
-//        else if (page != null && size == null){
-//            throw new IllegalArgumentException("TO DO !!!!!!!!!!");
-//        }
+        if (size != null) {
+            if (page != null) {
+                builder.paging(size, page - 1);//starting from 0
+            } else {
+                builder.paging(size, 0);
+            }
+        }
+        else if (page != null && size == null){
+            throw new IllegalArgumentException("TO DO !!!!!!!!!!");
+        }
         return addressBookManager.get(builder.buildResult());
     }
 

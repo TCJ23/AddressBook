@@ -26,8 +26,33 @@ public class AddressBookEntrySpecification implements Specification<AddressBookE
     @Override
     public Predicate toPredicate
             (Root<AddressBookEntry> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-        if (criteria == null || criteria.isEmpty()) {
-            return builder.disjunction();
+        //SimpleJpaRepository
+        //        Root<S> root = applySpecificationToCriteria(spec, domainClass, query);
+      /* private <S, U extends T> Root<U> applySpecificationToCriteria(@Nullable Specification<U> spec, Class<U> domainClass,
+                CriteriaQuery<S> query) {
+
+            Assert.notNull(domainClass, "Domain class must not be null!");
+            Assert.notNull(query, "CriteriaQuery must not be null!");
+
+            Root<U> root = query.from(domainClass);
+
+            if (spec == null) {
+                return root;
+            }
+            CriteriaBuilder builder = em.getCriteriaBuilder();
+		Predicate predicate = spec.toPredicate(root, query, builder);
+
+            KLUCZ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+		if (predicate != null) {
+			query.where(predicate);
+		}
+
+		return root;
+            */
+
+        if (criteria.isEmpty()) {
+            return null;
         }
         List<Predicate> predicates = new ArrayList<>();
         for (SearchCriteria element : criteria) {
