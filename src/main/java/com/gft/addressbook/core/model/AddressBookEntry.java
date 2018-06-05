@@ -1,14 +1,11 @@
 package com.gft.addressbook.core.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "ADDRESSBOOK_ENTRIES ")
@@ -35,19 +32,10 @@ public class AddressBookEntry {
         return "ID: " + ID + " " + firstName + " " + lastName + " " + telePhone;
     }
 
+    /*
+    Hibernate
+     */
     AddressBookEntry() {
-    }
-
-
-    public AddressBookEntry(String firstName, String lastName, String telePhone) {
-        this(null, firstName, lastName, telePhone);
-    }
-
-    public AddressBookEntry(Long ID, String firstName, String lastName, String telePhone) {
-        this.ID = ID;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.telePhone = telePhone;
     }
 
     @Override
